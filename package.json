@@ -10,7 +10,7 @@
     "develop": "concurrently \"npm run develop --prefix server\" \"npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix server && npm install --prefix client && npm run build --prefix client",
     "install-all": "npm install && npm install --prefix server && npm install --prefix client",
-    "server": "npm start --prefix server"
+    "start": "npm start --prefix server"
   },
   "dependencies": {
     "concurrently": "^5.0.2"
