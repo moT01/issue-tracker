@@ -7,7 +7,7 @@ const Comment = require('../../models/Comment')
 // @desc    Get comments for this issue
 // @access  Public
 router.get('/', (req, res) => {
-  const { issueId } = req.query
+  const { issueId } = req.body
 
   Comment.find({ issueId: { $eq: issueId } }).then(comments => {
     return res.json(comments)

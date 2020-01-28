@@ -39,7 +39,16 @@ router.post('/', auth, (req, res) => {
   newIssue.save().then(issue => res.json(issue))
 })
 
-/*router.delete('/:id', (req, res) => {
+// @route   PATCH api/issues
+// @desc    Edit or Close this issue
+// @access  Private to Admin and OP
+/*router.patch('/:id', auth, (req, res) => {
+  //ability to edit an issue (title or description)
+  //ability to open or close an issue
+
+  // so we will need the new title/desc
+  // and/or "closed" / "open" which sets "active" to true or false
+
   Item.findById(req.params.id)
     .then(item => item.remove().then(() => res.json({ success: true })))
     .catch(err => res.status(404).json({ success: false }))

@@ -3,6 +3,8 @@ import { ADD_COMMENT, GET_COMMENTS } from './types'
 import { tokenConfig } from './authActions'
 
 export const addCommentAction = (comment, issueId) => (dispatch, getState) => {
+  // Request body
+  //const body = JSON.stringify({ email, password })
   axios
     .post(
       '/api/comments',
@@ -15,7 +17,10 @@ export const addCommentAction = (comment, issueId) => (dispatch, getState) => {
 }
 
 export const getCommentsAction = issueId => dispatch => {
-  axios.get('/api/comments', { params: { issueId: issueId } }).then(res => {
+  // Request body
+  const body = JSON.stringify({ issueId })
+
+  axios.get('/api/comments', body).then(res => {
     return dispatch({ type: GET_COMMENTS, payload: res.data })
   })
 }
