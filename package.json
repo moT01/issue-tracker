@@ -1,0 +1,24 @@
+{
+  "name": "issue-tracker",
+  "version": "1.0.0",
+  "description": "A place to track coding issues",
+  "engines": {
+    "node": "10.15.0"
+  },
+  "scripts": {
+    "client": "npm start --prefix client",
+    "develop": "concurrently \"npm run develop --prefix server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix server && npm install --prefix client && npm run build --prefix client",
+    "install-all": "npm install && npm install --prefix server && npm install --prefix client",
+    "server": "npm start --prefix server"
+  },
+  "dependencies": {
+    "concurrently": "^5.0.2"
+  },
+  "devDependencies": {
+    "prettier": "^1.19.1"
+  },
+  "repository": "github.com/moT01",
+  "author": "moT01",
+  "license": "ISC"
+}
