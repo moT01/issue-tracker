@@ -19,10 +19,10 @@ mongoose
   .then(() => console.log(`mongodb connected via ${db}`))
   .catch(err => console.log(`cannot connect to mongodb via ${db}... ${err}`))
 
-app.use('/api/issues', require('./routes/api/issues'))
-app.use('/api/comments', require('./routes/api/comments'))
-app.use('/api/users', require('./routes/api/users'))
-app.use('/api/auth', require('./routes/api/auth'))
+app.use('/api/issues', require('./server/routes/api/issues'))
+app.use('/api/comments', require('./server/routes/api/comments'))
+app.use('/api/users', require('./server/routes/api/users'))
+app.use('/api/auth', require('./server/routes/api/auth'))
 
 // serve static assets in production
 if (process.env.NODE_ENV === 'production') {

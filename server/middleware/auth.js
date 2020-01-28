@@ -1,6 +1,5 @@
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
-const mongoose = require('mongoose')
 
 function auth(req, res, next) {
   const token = req.header('x-auth-token')

@@ -5,17 +5,24 @@
   "engines": {
     "node": "10.15.0"
   },
+  "main": "server.js",
   "scripts": {
     "client": "npm start --prefix client",
-    "develop": "concurrently \"npm run develop --prefix server\" \"npm run client\"",
+    "develop": "concurrently \"nodemon server.js\" \"npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
-    "install-all": "npm install && npm install --prefix server && npm install --prefix client",
-    "start": "npm start --prefix server"
+    "install-all": "npm install && npm install --prefix client",
+    "start": "node server.js"
   },
   "dependencies": {
-    "concurrently": "^5.0.2"
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^5.0.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.8.7"
   },
   "devDependencies": {
+    "nodemon": "^2.0.2",
     "prettier": "^1.19.1"
   },
   "repository": "github.com/moT01",
