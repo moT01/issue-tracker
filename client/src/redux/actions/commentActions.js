@@ -1,9 +1,14 @@
 import axios from 'axios'
 import { ADD_COMMENT, GET_COMMENTS } from './types'
+import { tokenConfig } from './authActions'
 
-export const addCommentAction = (comment, issueId) => dispatch => {
+export const addCommentAction = (comment, issueId) => (dispatch, getState) => {
   axios
-    .post('/api/comments', { comment: comment, issueId: issueId })
+    .post(
+      '/api/comments',
+      { comment: comment, issueId: issueId },
+      tokenConfig(getState)
+    )
     .then(res => {
       return dispatch({ type: ADD_COMMENT, payload: res.data })
     })

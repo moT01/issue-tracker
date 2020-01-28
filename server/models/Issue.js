@@ -7,14 +7,14 @@ const IssueSchema = new Schema({
     required: true,
     default: true
   },
+  createdBy: {
+    type: String,
+    required: true
+  },
   createdOn: {
     type: Date,
     required: true,
     default: Date.now
-  },
-  creatorId: {
-    type: String,
-    required: true
   },
   description: {
     type: String,

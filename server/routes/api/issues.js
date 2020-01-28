@@ -10,28 +10,30 @@ router.get('/', (req, res) => {
   Issue.find()
     .sort({ createdOn: -1 })
     .then(issues => {
-      console.log(issues)
       return res.json(issues)
     })
 })
 
 // @route   GET api/issues
 // @desc    Create a new issue for this project
-// @access  Private
+// @access  Private to anyone authenticated
 router.post('/', auth, (req, res) => {
   const { title, description } = req.body
 
-  console.log(description)
   if (!title) {
     return res.status(400).json({ msg: 'Please enter a title' })
   }
 
-  const { id } = req.user
+  const { name } = req.user
+
+  if (!name) {
+    return res.status(400).json({ msg: 'User name not found' })
+  }
 
   const newIssue = new Issue({
     title: title,
     description: description,
-    creatorId: id
+    createdBy: name
   })
 
   newIssue.save().then(issue => res.json(issue))
