@@ -7,7 +7,7 @@ const Comment = require('../../models/Comment')
 // @desc    Get comments for this issue
 // @access  Public
 router.get('/', (req, res) => {
-  const { issueId } = req.body
+  const { issueId } = req.query
 
   Comment.find({ issueId: { $eq: issueId } }).then(comments => {
     return res.json(comments)
@@ -18,10 +18,10 @@ router.get('/', (req, res) => {
 // @desc    Add a new comment on this issue
 // @access  Private to anyone authenticated
 router.post('/', auth, (req, res) => {
-  const { comment, issueId } = req.body
+  const { content, issueId } = req.body
   const { name } = req.user
 
-  if (!comment) {
+  if (!content) {
     return res.status(400).json({ msg: 'Please enter a comment' })
   }
 
@@ -30,12 +30,34 @@ router.post('/', auth, (req, res) => {
   }
 
   const newComment = new Comment({
-    comment: comment,
+    content: content,
     issueId: issueId,
     createdBy: name
   })
 
   newComment.save().then(comment => res.json(comment))
+})
+
+// @route   PATCH api/comments
+// @desc    Edit this comment
+// @access  Private to Admin and OP
+router.patch('/', auth, (req, res) => {
+  const { permissionsLevel, name } = req.user
+  const { content, commentId, createdBy } = req.body
+
+  if (permissionsLevel >= 2 || createdBy === name) {
+    Comment.findOneAndUpdate(
+      { _id: commentId },
+      { $set: { content: content } },
+      { returnOriginal: false }
+    )
+      .then(comment => {
+        return res.json(comment)
+      })
+      .catch(err => res.status(404).json({ success: false }))
+  } else {
+    return res.status(401).json({ msg: 'Permission Denied' })
+  }
 })
 
 // @route   DELETE api/comments

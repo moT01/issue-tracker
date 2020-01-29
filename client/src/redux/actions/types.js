@@ -1,10 +1,12 @@
 // issues
 export const CREATE_ISSUE = 'CREATE_ISSUE'
 export const GET_ISSUES = 'GET_ISSUES'
+export const EDIT_ISSUE = 'EDIT_ISSUE'
 
 // comments
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const GET_COMMENTS = 'GET_COMMENTS'
+export const EDIT_COMMENT = 'EDIT_COMMENT'
 
 // auth
 export const USER_LOADING = 'USER_LOADING'

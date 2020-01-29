@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import {
   Button,
   Form,
@@ -13,10 +13,11 @@ import {
   addCommentAction,
   getCommentsAction
 } from '../redux/actions/commentActions'
+import EditCommentModal from './EditCommentModal'
 
 class Comments extends Component {
   state = {
-    comment: ''
+    content: ''
   }
 
   componentDidMount() {
@@ -33,7 +34,7 @@ class Comments extends Component {
     e.preventDefault()
     e.target.reset()
     this.props.addCommentAction(
-      this.state.comment,
+      this.state.content,
       this.props.match.params.issueId
     )
   }
@@ -43,19 +44,26 @@ class Comments extends Component {
 
     return (
       <>
-        {comments.map(({ _id, comment }) => (
-          <Toast>
-            <ToastHeader>{_id}</ToastHeader>
-            <ToastBody>{comment}</ToastBody>
-          </Toast>
+        {comments.map(({ _id, content, createdBy }) => (
+          <Fragment key={_id}>
+            <Toast>
+              <ToastHeader>{_id}</ToastHeader>
+              <ToastBody>{content}</ToastBody>
+            </Toast>
+            <EditCommentModal
+              commentId={_id}
+              content={content}
+              createdBy={createdBy}
+            />
+          </Fragment>
         ))}
 
         <Form onSubmit={this.onSubmit}>
           <FormGroup>
             <Input
               type='textarea'
-              name='comment'
-              id='comment'
+              name='content'
+              id='content'
               placeholder='Leave a comment'
               onChange={this.onChange}
               style={{ marginTop: '2rem' }}

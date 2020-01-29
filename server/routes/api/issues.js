@@ -18,17 +18,9 @@ router.get('/', (req, res) => {
 // @desc    Create a new issue for this project
 // @access  Private to anyone authenticated
 router.post('/', auth, (req, res) => {
-  const { title, description } = req.body
-
-  if (!title) {
-    return res.status(400).json({ msg: 'Please enter a title' })
-  }
-
   const { name } = req.user
-
-  if (!name) {
-    return res.status(400).json({ msg: 'User name not found' })
-  }
+  const { title, description } = req.body
+  if (!title) return res.status(400).json({ msg: 'Please enter a title' })
 
   const newIssue = new Issue({
     title: title,
@@ -40,18 +32,51 @@ router.post('/', auth, (req, res) => {
 })
 
 // @route   PATCH api/issues
-// @desc    Edit or Close this issue
+// @desc    Edit this issue
 // @access  Private to Admin and OP
-/*router.patch('/:id', auth, (req, res) => {
-  //ability to edit an issue (title or description)
-  //ability to open or close an issue
+router.patch('/', auth, (req, res) => {
+  const { permissionsLevel, name } = req.user
+  const { title, description, issueId, createdBy } = req.body
 
-  // so we will need the new title/desc
-  // and/or "closed" / "open" which sets "active" to true or false
+  if (permissionsLevel >= 2 || createdBy === name) {
+    Issue.findOneAndUpdate(
+      { _id: issueId },
+      { $set: { title: title, description: description } },
+      { returnOriginal: false }
+    )
+      .then(issue => {
+        return res.json(issue)
+      })
+      .catch(err => res.status(404).json({ success: false }))
+  } else {
+    return res.status(401).json({ msg: 'Permission Denied' })
+  }
+})
 
-  Item.findById(req.params.id)
-    .then(item => item.remove().then(() => res.json({ success: true })))
-    .catch(err => res.status(404).json({ success: false }))
-})*/
+// @route   PATCH api/issues/toggle
+// @desc    Open/Close this issue
+// @access  Private to Admin and OP
+router.patch('/toggle', auth, (req, res) => {
+  const { issueId, createdBy } = req.body
+  const { permissionsLevel, name } = req.user
+
+  if (permissionsLevel >= 2 || createdBy === name) {
+    Issue.findById(issueId).then(issue => {
+      if (!issue) return res.status(400).json({ msg: 'Issue not found' })
+
+      Issue.findOneAndUpdate(
+        { _id: issueId },
+        { $set: { active: !issue.active } },
+        { returnOriginal: false }
+      )
+        .then(issue => {
+          return res.json(issue)
+        })
+        .catch(err => res.status(404).json({ success: false }))
+    })
+  } else {
+    return res.status(401).json({ msg: 'Permission Denied' })
+  }
+})
 
 module.exports = router
