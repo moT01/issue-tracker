@@ -41,45 +41,54 @@ class Comments extends Component {
 
   render() {
     const { comments } = this.props.comments
+    const isAuthenticated = this.props.isAuthenticated
+    const { name, permissionsLevel } = this.props.user
 
     return (
       <>
         {comments.map(({ _id, content, createdBy }) => (
           <Fragment key={_id}>
             <Toast>
-              <ToastHeader>{_id}</ToastHeader>
+              <ToastHeader>{createdBy}</ToastHeader>
               <ToastBody>{content}</ToastBody>
             </Toast>
-            <EditCommentModal
-              commentId={_id}
-              content={content}
-              createdBy={createdBy}
-            />
+            {name === createdBy || permissionsLevel >= 2 ? (
+              <EditCommentModal
+                commentId={_id}
+                content={content}
+                createdBy={createdBy}
+              />
+            ) : null}
           </Fragment>
         ))}
 
-        <Form onSubmit={this.onSubmit}>
-          <FormGroup>
-            <Input
-              type='textarea'
-              name='content'
-              id='content'
-              placeholder='Leave a comment'
-              onChange={this.onChange}
-              style={{ marginTop: '2rem' }}
-            />
-            <Button color='dark' style={{ marginTop: '2rem' }} block>
-              Comment
-            </Button>
-          </FormGroup>
-        </Form>
+        {isAuthenticated ? (
+          <Form onSubmit={this.onSubmit}>
+            <FormGroup>
+              <Input
+                type='textarea'
+                name='content'
+                id='content'
+                placeholder='Leave a comment'
+                onChange={this.onChange}
+                style={{ marginTop: '2rem' }}
+              />
+
+              <Button color='dark' style={{ marginTop: '2rem' }} block>
+                Comment
+              </Button>
+            </FormGroup>
+          </Form>
+        ) : null}
       </>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  comments: state.comments
+  comments: state.comments,
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user
 })
 
 export default connect(mapStateToProps, {

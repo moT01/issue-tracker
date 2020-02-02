@@ -83,6 +83,8 @@ export const loginAction = ({ email, password }) => dispatch => {
   axios
     .post('/api/auth', body, config)
     .then(res => {
+      console.log('resSSSSSS')
+      console.log(res)
       dispatch({
         type: LOGIN_SUCCESS,
         payload: res.data

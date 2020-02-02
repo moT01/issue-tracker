@@ -21,7 +21,7 @@ router.post('/', (req, res) => {
   // check for existing user
   User.findOne({ email }).then(user => {
     if (!user) return res.status(400).json({ msg: 'User not found' })
-
+    console.log(user)
     // validate password
     bcrypt.compare(password, user.password).then(isMatch => {
       if (!isMatch) return res.status(400).json({ msg: 'Invalid Password' })
@@ -34,7 +34,8 @@ router.post('/', (req, res) => {
           user: {
             id: user.id,
             name: user.name,
-            email: user.email
+            email: user.email,
+            permissionsLevel: user.permissionsLevel
           }
         })
       })

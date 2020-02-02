@@ -13,10 +13,11 @@ const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
   isLoading: false,
-  user: null
+  user: {}
 }
 
 export default function(state = initialState, action) {
+  console.log(action)
   switch (action.type) {
     case USER_LOADING:
       return {
@@ -47,7 +48,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         token: null,
-        user: null,
+        user: {},
         isAuthenticated: false,
         isLoading: false
       }

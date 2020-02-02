@@ -16,25 +16,34 @@ class Issues extends Component {
 
   render() {
     const { issues } = this.props.issues
+    const isAuthenticated = this.props.isAuthenticated
+    const { name, permissionsLevel } = this.props.user
 
     return (
       <div>
-        <NewIssueModal />
+        {isAuthenticated ? <NewIssueModal /> : null}
         <Col lg='6' sm='8'>
-          {issues.map(({ title, description, createdBy, _id }) => (
+          {issues.map(({ title, description, createdBy, createdOn, _id }) => (
             <Fragment key={_id}>
               <Link to={`/issue/${_id}`}>
                 <Toast>
-                  <ToastHeader>{title}</ToastHeader>
+                  <ToastHeader>
+                    {title}
+                    <span>
+                      opened by {createdBy} on {createdOn}
+                    </span>
+                  </ToastHeader>
                   <ToastBody>{description}</ToastBody>
                 </Toast>
               </Link>
-              <EditIssueModal
-                createdBy={createdBy}
-                title={title}
-                description={description}
-                issueId={_id}
-              />
+              {name === createdBy || permissionsLevel >= 2 ? (
+                <EditIssueModal
+                  createdBy={createdBy}
+                  title={title}
+                  description={description}
+                  issueId={_id}
+                />
+              ) : null}
               <Button
                 onClick={() => this.props.toggleIssueAction(_id, createdBy)}
               >
@@ -49,7 +58,9 @@ class Issues extends Component {
 }
 
 const mapStateToProps = state => ({
-  issues: state.issues
+  issues: state.issues,
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user
 })
 
 export default connect(mapStateToProps, { getIssuesAction, toggleIssueAction })(
