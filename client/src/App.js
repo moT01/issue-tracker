@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { Provider } from 'react-redux'
-import store from './redux/store'
 import { BrowserRouter } from 'react-router-dom'
 import Route from 'react-router-dom/Route'
+import store from './redux/store'
 
 import Issues from './components/Issues'
 import Comments from './components/Comments'
@@ -18,13 +17,13 @@ class App extends Component {
   }
   render() {
     return (
-      <Provider store={store}>
+      <>
         <AppNavbar />
         <BrowserRouter>
           <Route exact path='/' component={Issues} />
           <Route path='/issue/:issueId' component={Comments} />
         </BrowserRouter>
-      </Provider>
+      </>
     )
   }
 }
